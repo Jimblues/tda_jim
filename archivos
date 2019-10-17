@@ -1,7 +1,7 @@
 ///////Archivos/////////
 //Funcion que retorna la linea(del archivo) donde se encuentra un dni, en este caso(pude modificarse).
 int linea_a_modificar(Alumno aux_alumno){
-    int cont=1;         //Contador de lineas solo para nombre
+    int cont=1;         //Contador de lineas.
     FILE* archivo;
     archivo = fopen("alumnosF.txt","r");    //alumnosF.txt puede ser reemplazo por cualquier nombre
     while(feof(archivo)==0){
