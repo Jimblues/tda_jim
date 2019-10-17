@@ -21,3 +21,78 @@ int linea_a_modificar(Alumno aux_alumno){
     return cont;
 }
 /////////////////////////////////////////////////////////////////EAJ
+//Procedimineto que quita el ultimo caracter de un vector de char, en este caso, es utilizado para quitar un salto de linea.
+void QuitarSaltodeLinea(char* txt){
+    if(strlen(txt)>0){
+        txt[strlen(txt)-1]='\0';
+    }
+}
+/////////////////EAJ
+//Funcion que retorna la cantidad de lineas que tiene un archivo, el nombre de este, es ingresado como parametro(nombre).
+int total_lineas(char nombre[50]){
+    int cont=0;
+    FILE* archivo;
+    archivo = fopen(nombre,"r");
+    while(feof(archivo)==0){
+        char n[85];
+        fgets(n,sizeof(n)/sizeof(char),archivo);
+        if(strlen(n)>0){
+            cont++;
+        }
+    }
+    fclose(archivo);
+    return cont;
+}
+//////////////////EAJ
+//Procedimiento que carga la lista de alumnos y profesores, desde ambos archivos(alumnosF.txt y profesores.txt).
+void cargar_listas(ListaAl* alumnos,ListaProf* profesores){
+    FILE* archivo_a;
+    archivo_a = fopen("alumnosF.txt","r");
+    if(archivo_a==NULL){
+        fclose(archivo_a);
+        archivo_a = fopen("alumnosF.txt","w+");
+    }
+    char textos[3][31];
+    int i=0;
+    while(feof(archivo_a)==0){
+        if(feof(archivo_a)==0){
+            char texto[40];
+            if(i>2){
+                i=0;
+                Alumno aux = CrearAlumno(textos[i],textos[i+1],textos[i+2]);
+                agregarAlumno(alumnos,aux,getTamanioListaAlumnos(alumnos));
+            }else{
+                fgets(texto,sizeof(texto)/sizeof(char),archivo_a);
+                QuitarSaltodeLinea(texto);
+                strcpy(textos[i],texto);
+                i++;
+            }
+        }
+    }
+    fclose(archivo_a);
+    /////////////////////////////////////////
+    i=0;
+    FILE* archivo_p;
+    archivo_p = fopen("profesores.txt","r");
+    if(archivo_p==NULL){
+        fclose(archivo_p);
+        archivo_p = fopen("profesores.txt","w+");
+    }
+    while(feof(archivo_p)==0){
+        if(feof(archivo_p)==0){
+            char texto[40];
+            if(i>2){
+                i=0;
+                Profesor aux = CrearProfesor(textos[i],textos[i+1],textos[i+2]);
+                agregarProfesor(alumnos,aux,getTamanioListaProfesores(profesores));
+            }else{
+                fgets(texto,sizeof(texto)/sizeof(char),archivo_p);
+                QuitarSaltodeLinea(texto);
+                strcpy(textos[i],texto);
+                i++;
+            }
+        }
+    }
+    fclose(archivo_p);
+}
+//////////////////EAJ
